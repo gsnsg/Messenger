@@ -23,13 +23,14 @@ extension DatabaseManager {
     public func usersExits(with email: String, completion: @escaping ((Bool) -> Void)) {
         var safeEmail = email.replacingOccurrences(of: ".", with: "-")
         safeEmail = safeEmail.replacingOccurrences(of: "@", with: "-")
-        database.child(safeEmail).observeSingleEvent(of: .value) { (snapshot) in
-            guard snapshot.exists() else {
-                completion(true)
+        database.child(safeEmail).observeSingleEvent(of: .value, with: { snapshot in
+            guard snapshot.value as? [String: Any] != nil else {
+                completion(false)
                 return
             }
-            completion(false)
-        }
+            
+            completion(true)
+        })
     }
     /// Inserts new user to database
     public func insertUser(with user: ChatAppUser) {
@@ -47,5 +48,5 @@ struct ChatAppUser {
         safeEmail = safeEmail.replacingOccurrences(of: "@", with: "-")
         return safeEmail
     }
-//    let profilePictureUrl: String
+    //    let profilePictureUrl: String
 }
