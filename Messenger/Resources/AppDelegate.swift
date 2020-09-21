@@ -58,7 +58,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
         guard let user = user else {
             return
         }
-       
+        
         print("Did signin with Google : \(user)")
         
         guard let email = user.profile.email, let firstName = user.profile.givenName, let lastName = user.profile.familyName else {
@@ -66,7 +66,34 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
         }
         DatabaseManager.shared.usersExits(with: email) { exists in
             if !exists {
-                DatabaseManager.shared.insertUser(with: ChatAppUser(firstName: firstName, lastName: lastName, emailAddress: email))
+                let chatUser = ChatAppUser(firstName: firstName, lastName: lastName, emailAddress: email)
+                DatabaseManager.shared.insertUser(with: chatUser) { success in
+                    if success {
+                        //Upload Image
+                        if user.profile.hasImage {
+                            guard let url = user.profile.imageURL(withDimension: 200) else {
+                                return
+                            }
+                            URLSession.shared.dataTask(with: url) { (data, response, error) in
+                                guard let data = data else {
+                                    print("Failed to get Data from facebook")
+                                    return
+                                }
+                                print("Got Data from Google. Uploading...")
+                                let fileName = chatUser.profilePictureFileName
+                                StorageManager.shared.uploadProfilePicture(with: data, fileName: fileName) { (result) in
+                                    switch result {
+                                    case .success(let downloadURL):
+                                        UserDefaults.standard.set(downloadURL, forKey: "profile_picture_url")
+                                        print(downloadURL)
+                                    case .failure(let error):
+                                        print("Storage Manager Error: \(error)")
+                                    }
+                                }
+                            }.resume()
+                        }
+                    }
+                }
             }
         }
         
@@ -93,7 +120,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
         print("Google User was disconnected")
     }
     
-   
+    
     
     
 }

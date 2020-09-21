@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3218744725186ED60013FF06 /* StorageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3218744625186ED60013FF06 /* StorageManager.swift */; };
 		3242CC31251344DE006CD546 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3242CC30251344DE006CD546 /* Extensions.swift */; };
 		326483A525133C020077E403 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 326483A425133C020077E403 /* AppDelegate.swift */; };
 		326483A725133C020077E403 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 326483A625133C020077E403 /* SceneDelegate.swift */; };
@@ -27,6 +28,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		3218744625186ED60013FF06 /* StorageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageManager.swift; sourceTree = "<group>"; };
 		3242CC30251344DE006CD546 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		326483A125133C020077E403 /* Messenger.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Messenger.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		326483A425133C020077E403 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -138,6 +140,7 @@
 				326483A625133C020077E403 /* SceneDelegate.swift */,
 				3242CC30251344DE006CD546 /* Extensions.swift */,
 				3272EBD5251373E80064D9FD /* DatabaseManager.swift */,
+				3218744625186ED60013FF06 /* StorageManager.swift */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -323,6 +326,7 @@
 				326483BF25133DF60077E403 /* LoginViewViewController.swift in Sources */,
 				32F134B325166C9400ADAECA /* ChatViewController.swift in Sources */,
 				326483C325133E260077E403 /* PhotoViewerViewController.swift in Sources */,
+				3218744725186ED60013FF06 /* StorageManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

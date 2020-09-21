@@ -46,8 +46,7 @@ class ChatViewController: MessagesViewController {
                                 messageId: "Hello There",
                                 sentDate: Date(),
                                 kind: .text("Hello World")))
-        
-        view.backgroundColor = .systemRed
+    
         
         messagesCollectionView.messagesDataSource = self
         messagesCollectionView.messagesLayoutDelegate = self
