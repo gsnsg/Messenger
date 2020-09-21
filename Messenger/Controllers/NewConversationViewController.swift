@@ -11,6 +11,8 @@ import JGProgressHUD
 
 class NewConversationViewController: UIViewController {
     
+    public var completion: (([String : String]) -> Void)?
+    
     private let spinner = JGProgressHUD(style: .dark)
     
     private var users = [[String : String]]()
@@ -82,6 +84,11 @@ extension NewConversationViewController: UITableViewDelegate, UITableViewDataSou
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
+        let targetResultData =  results[indexPath.row]
+        dismiss(animated: true) { [weak self] in
+            self?.completion?(targetResultData)
+        }
+        
     }
 }
 
@@ -98,10 +105,6 @@ extension NewConversationViewController: UISearchBarDelegate {
     }
     
     func searchUsers(query: String) {
-        // Check if array has firebase results
-        // if it does: filter
-        // if not fetch from firebase
-        // Update UI
         if hasFetched {
             filterUsers(with: query)
         } else {

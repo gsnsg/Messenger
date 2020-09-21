@@ -101,7 +101,7 @@ extension ProfileViewController: UITableViewDelegate, UITableViewDataSource {
             
             do {
                 try Auth.auth().signOut()
-                UserDefaults.standard.removeObject(forKey: "email")
+//                UserDefaults.standard.removeObject(forKey: "email")
                 let newVC = LoginViewViewController()
                 let nav = UINavigationController(rootViewController: newVC)
                 nav.modalPresentationStyle = .fullScreen
