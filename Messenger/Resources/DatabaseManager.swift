@@ -14,6 +14,12 @@ final class DatabaseManager {
     static let shared = DatabaseManager()
     
     private let database = Database.database().reference()
+    
+    static func safeEmail(emailAddress: String) -> String {
+        var safeEmail = emailAddress.replacingOccurrences(of: ".", with: "-")
+        safeEmail = safeEmail.replacingOccurrences(of: "@", with: "-")
+        return safeEmail
+    }
 }
 
 //MARK: - Account Management
@@ -33,6 +39,18 @@ extension DatabaseManager {
         })
     }
     
+    public func getAllUsers(completion: @escaping (Result<[[String : String]], Error>) -> Void) {
+        database.child("users").observeSingleEvent(of: .value) { (snapshot) in
+            guard let value = snapshot.value as? [[String : String]] else {
+                completion(.failure(DatabaseError.failedToFetch))
+                return
+            }
+            completion(.success(value))
+        }
+    }
+    public enum DatabaseError: Error {
+        case failedToFetch
+    }
     /// Inserts new user to database
     public func insertUser(with user: ChatAppUser, completion: @escaping (Bool) -> Void) {
         database.child(user.safeEmail).setValue(["first_name" : user.firstName, "last_name" : user.lastName, "email" : user.emailAddress]) { (error, _) in
@@ -41,7 +59,39 @@ extension DatabaseManager {
                 completion(false)
                 return
             }
-            completion(true)
+            self.database.child("users").observeSingleEvent(of: .value) { (snapshot) in
+                let newElement: [String : String] = [
+                    "name": user.firstName + " " + user.lastName,
+                    "email": user.safeEmail
+                ]
+                
+                if var usersCollection = snapshot.value as? [[String: String]] {
+                    usersCollection.append(newElement)
+                    self.database.child("users").setValue(usersCollection) { (error, _) in
+                        guard  error == nil else {
+                            completion(false)
+                            return
+                        }
+                        completion(true)
+                    }
+                    
+                } else {
+                    let newCollection: [[String : String]] = [
+                        [
+                            "name": user.firstName + " " + user.lastName,
+                            "email": user.safeEmail
+                        ]
+                    ]
+                    self.database.child("users").setValue(newCollection) { (error, _) in
+                        guard  error == nil else {
+                            completion(false)
+                            return
+                        }
+                        completion(true)
+                    }
+                }
+            }
+            
         }
     }
 }

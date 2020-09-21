@@ -236,6 +236,7 @@ class RegisterViewController: UIViewController {
                         }
                     }
                 }
+                UserDefaults.standard.setValue(chatUser.emailAddress, forKey: "email")
                 strongSelf.navigationController?.dismiss(animated: true, completion: nil)
 
             }

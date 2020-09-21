@@ -31,7 +31,7 @@ final class StorageManager {
                     return
                 }
                 let urlString = url!.absoluteString
-                print("Dwonload url returned: \(urlString)")
+                print("Download url returned: \(urlString)")
                 completion(.success(urlString))
             }
         }
@@ -40,6 +40,17 @@ final class StorageManager {
     public enum StorageErrors: Error {
          case failedToUpload
         case failedToGetDownloadURL
+    }
+    
+    public func downloadURL(for path: String, completion: @escaping (Result<URL, Error>) -> Void) {
+        let reference = storage.child(path)
+        reference.downloadURL { (url, error) in
+            guard let url = url, error == nil else {
+                completion(.failure(StorageErrors.failedToGetDownloadURL))
+                return
+            }
+            completion(.success(url))
+        }
     }
 }
 
